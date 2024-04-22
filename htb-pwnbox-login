@@ -1,0 +1,37 @@
+#!/bin/bash
+
+
+while getopts f:h: flag
+do
+    case "${flag}" in
+        f) filename=${OPTARG};;
+		h) ###display help
+          Help
+          exit;;
+    esac
+done
+
+Help()
+{
+  echo "Usage: sudo bash scriptname.sh -f filename"
+  echo 'File format: `username password ip`'
+}
+
+# Check if sshpass is installed
+if ! which sshpass > /dev/null; then
+   echo "sshpass is not installed. Attempting to install..."
+   
+   # Update package list
+   sudo apt-get update
+   
+   # Install sshpass
+   sudo apt-get install -y sshpass
+else
+   echo "sshpass is already installed, logging in"
+fi
+
+# Read the file
+read -r username password ip < $filename
+# 
+# Use sshpass to provide the password for ssh
+sshpass -p "$password" ssh -o StrictHostKeyChecking=accept-new "$username"@"$ip"
