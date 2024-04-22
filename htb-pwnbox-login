@@ -1,21 +1,20 @@
 #!/bin/bash
 
-
-while getopts f:h: flag
-do
-    case "${flag}" in
-        f) filename=${OPTARG};;
-		h) ###display help
-          Help
-          exit;;
-    esac
-done
-
 Help()
 {
   echo "Usage: sudo bash scriptname.sh -f filename"
   echo 'File format: `username password ip`'
 }
+
+while getopts f:h flag
+do
+    case "${flag}" in
+        h) ###display help
+          Help
+          exit;;
+        f) filename=${OPTARG};;
+    esac
+done
 
 # Check if sshpass is installed
 if ! which sshpass > /dev/null; then
